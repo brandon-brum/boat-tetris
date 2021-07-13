@@ -1,0 +1,27 @@
+{
+  "name": "boatcrossingtetris",
+  "version": "1.0.0",
+  "description": "A variation of Tetris based on the old riddle about a sheep, a wolf, and a bale of hay crossing a river on a boat.",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^7.30.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brandon-brum/boat-tetris.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brandon-brum/boat-tetris/issues"
+  },
+  "homepage": "https://github.com/brandon-brum/boat-tetris#readme"
+}

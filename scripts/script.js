@@ -97,14 +97,21 @@ class Piece {
     const shapeData = getRandomFrom(ShapeData)
     this.shape = shape || new Shape(shapeData.name, shapeData.data)
     this.position = { x: 3, y: 0 }
-    this.type = type || getRandomFrom(Types)
+    this.type = Types.Basic || type || getRandomFrom(Types)
   }
-  /*
-    NEXT STEP: Put move() and rotate() with kick
-  */
 
-  move (x, y) {
-    if (!this.shape.translated(this.position.x + x, this.position.y + y).isColliding()) {
+  kick (x, y, rot) {
+    if (!this.shape.translated(this.position.x + x, this.position.y + y).rotated(rot).isColliding()) {
+      console.log('kick', x, y, rot)
+      this.move(x, y, true)
+      this.shape.rotate(rot)
+      return true
+    }
+    return false
+  }
+
+  move (x, y, force = false) {
+    if (!this.shape.translated(this.position.x + x, this.position.y + y).isColliding() || force) {
       this.position = { x: this.position.x + x, y: this.position.y + y }
       return true
     }
@@ -115,6 +122,59 @@ class Piece {
     if (!this.shape.translated(this.position.x, this.position.y).rotated(rot).isColliding()) {
       this.shape.rotate(rot)
       return true
+    } else {
+      let data = []
+      // SRS Kick Data, check out: https://tetris.fandom.com/wiki/SRS#Basic_Rotation
+      const kicks = {
+        Other: {
+          CW: [
+            [[-1, 0], [-1, 1], [0, -2], [-1, -2]],
+            [[1, 0], [1, -1], [0, 2], [1, 2]],
+            [[1, 0], [1, 1], [0, -2], [1, -2]],
+            [[-1, 0], [-1, -1], [0, 2], [-1, -2]]
+          ],
+          CCW: [
+            [[1, 0], [1, -1], [0, 2], [1, 2]],
+            [[-1, 0], [-1, 1], [0, -2], [-1, -2]],
+            [[-1, 0], [-1, -1], [0, 2], [-1, 2]],
+            [[1, 0], [1, 1], [0, -2], [1, -2]]
+          ]
+        },
+        I: {
+          CW: [
+            [[-2, 0], [1, 0], [-2, -1], [1, 2]],
+            [[-1, 0], [2, 0], [-1, 2], [2, -1]],
+            [[2, 0], [-1, 0], [2, 1], [-1, -2]],
+            [[1, 0], [-2, 0], [1, -2], [-2, 1]]
+          ],
+          CCW: [
+            [[2, 0], [-1, 0], [2, 1], [-1, -2]],
+            [[1, 0], [-2, 0], [1, -2], [-2, 1]],
+            [[-2, 0], [1, 0], [-2, -1], [1, 2]],
+            [[-1, 0], [2, 0], [-1, 2], [2, -1]]
+          ]
+        }
+      }
+
+      if (this.shape.name === 'I') {
+        if (rot === 1) {
+          data = kicks.I.CW[this.shape.rotation]
+        } else {
+          data = kicks.I.CCW[this.shape.rotation]
+        }
+      } else {
+        if (rot === 1) {
+          data = kicks.Other.CW[this.shape.rotation]
+        } else {
+          data = kicks.Other.CCW[this.shape.rotation]
+        }
+      }
+      // console.log(data, `kicks.${this.shape.name}.${['CCW', '', 'CW'][rot + 1]}[${this.shape.rotation}]`)
+      let point = {}
+      for (let i = 0; i <= 3; i++) {
+        point = { x: data[i][0], y: data[i][1] }
+        if (this.kick(point.x, -point.y, rot)) { return true }
+      }
     }
     return false
   }
