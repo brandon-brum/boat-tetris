@@ -88,8 +88,8 @@ class Type {
 const Types = {
   Wolf: new Type('Wolf', 'Wolf.png', 'Sheep'),
   Hay: new Type('Hay', 'Hay.png', 'none', 'Sheep'),
-  Sheep: new Type('Sheep', 'Sheep.png', 'Hay', 'Wolf'),
-  Basic: new Type('Basic', 'Basic.png')
+  Sheep: new Type('Sheep', 'Sheep.png', 'Hay', 'Wolf')
+  // Basic: new Type('Basic', 'Basic.png')
 }
 
 class Piece {
@@ -97,7 +97,7 @@ class Piece {
     const shapeData = getRandomFrom(ShapeData)
     this.shape = shape || new Shape(shapeData.name, shapeData.data)
     this.position = { x: 3, y: 0 }
-    this.type = Types.Basic || type || getRandomFrom(Types)
+    this.type = type || getRandomFrom(Types)
   }
 
   kick (x, y, rot) {
@@ -134,10 +134,10 @@ class Piece {
             [[-1, 0], [-1, -1], [0, 2], [-1, -2]]
           ],
           CCW: [
+            [[1, 0], [1, 1], [0, -2], [1, -2]],
             [[1, 0], [1, -1], [0, 2], [1, 2]],
             [[-1, 0], [-1, 1], [0, -2], [-1, -2]],
-            [[-1, 0], [-1, -1], [0, 2], [-1, 2]],
-            [[1, 0], [1, 1], [0, -2], [1, -2]]
+            [[-1, 0], [-1, -1], [0, 2], [-1, 2]]
           ]
         },
         I: {
@@ -148,10 +148,10 @@ class Piece {
             [[1, 0], [-2, 0], [1, -2], [-2, 1]]
           ],
           CCW: [
+            [[-1, 0], [2, 0], [-1, 2], [2, -1]],
             [[2, 0], [-1, 0], [2, 1], [-1, -2]],
             [[1, 0], [-2, 0], [1, -2], [-2, 1]],
-            [[-2, 0], [1, 0], [-2, -1], [1, 2]],
-            [[-1, 0], [2, 0], [-1, 2], [2, -1]]
+            [[-2, 0], [1, 0], [-2, -1], [1, 2]]
           ]
         }
       }
@@ -261,8 +261,8 @@ const Game = {
       const prevActivePiece = Game.activePiece
       console.log(this.content[slot] !== null)
       if (this.content[slot] !== null) {
-        this.content[slot] = prevActivePiece
         Game.activePiece = this.content[slot]
+        this.content[slot] = prevActivePiece
       } else {
         this.content[slot] = prevActivePiece
         Game.activePiece = Game.next.content.shift()
